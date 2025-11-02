@@ -44,6 +44,7 @@ jobs:
           echo "Compilation failed - out directory not found"
           exit 1
         fi
+        echo "✅ Compilation successful - out directory exists"
       shell: bash
     
     - name: Package extension
@@ -89,11 +90,10 @@ jobs:
     
     - name: Verify no console.logs in production code
       run: |
-        if grep -r "console\.log" src/ 2>/dev/null | grep -v "extension.*active" | grep -v "deactivate"; then
-          echo "⚠️  Warning: Found console.log statements"
-        else
-          echo "✅ No problematic console.log statements found"
+        if grep -r "console\.log" src/ 2>/dev/null | grep -v "extension.*active" | grep -v "deactivate" || true; then
+          echo "⚠️  Warning: Found console.log statements (this is just a warning)"
         fi
+        echo "✅ Console.log check completed"
       continue-on-error: true
       shell: bash
 
