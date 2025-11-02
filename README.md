@@ -1,6 +1,6 @@
 # Emoji Eraser
 
-[![CI](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml/badge.svg)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml)
+[![CI](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/DabwitsoMweemba.emoji-eraser?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
 [![VS Code Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/DabwitsoMweemba.emoji-eraser)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
