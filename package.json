@@ -1,26 +1,93 @@
 {
   "name": "emoji-eraser",
+  "displayName": "Emoji Eraser",
+  "description": "Remove all emojis from your codebase. Keep your code clean, professional, and emoji-free.",
   "version": "1.0.0",
-  "main": "index.js",
+  "publisher": "dvbwitso",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "emoji",
+    "clean",
+    "formatter",
+    "remove",
+    "unicode"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "emoji-eraser.removeFromFile",
+        "title": "Remove Emojis from Current File",
+        "category": "Emoji Eraser"
+      },
+      {
+        "command": "emoji-eraser.removeFromWorkspace",
+        "title": "Remove Emojis from Workspace",
+        "category": "Emoji Eraser"
+      },
+      {
+        "command": "emoji-eraser.removeFromComments",
+        "title": "Remove Emojis from Comments Only",
+        "category": "Emoji Eraser"
+      },
+      {
+        "command": "emoji-eraser.removeFromStrings",
+        "title": "Remove Emojis from Strings Only",
+        "category": "Emoji Eraser"
+      }
+    ],
+    "configuration": {
+      "title": "Emoji Eraser",
+      "properties": {
+        "emojiEraser.fileTypes": {
+          "type": "array",
+          "default": [
+            "javascript",
+            "typescript",
+            "python",
+            "java",
+            "markdown",
+            "json",
+            "html",
+            "css"
+          ],
+          "description": "File types to scan for emojis"
+        },
+        "emojiEraser.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications with emoji removal summary"
+        }
+      }
+    }
+  },
   "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dvbwitso/emoji-eraser.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Dabwitso Mweemba",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dvbwitso/emoji-eraser/issues"
   },
   "homepage": "https://github.com/dvbwitso/emoji-eraser#readme",
-  "description": "",
   "devDependencies": {
     "@types/node": "^24.9.2",
+    "@types/vscode": "^1.105.0",
     "typescript": "^5.9.3",
-    "vsce": "^2.15.0",
-    "vscode": "^1.1.37"
+    "vsce": "^2.15.0"
   }
 }
