@@ -22,6 +22,7 @@ jobs:
           echo "Expected format: v1.2.3"
           exit 1
         fi
+      shell: bash
     
     - name: Check tag matches package.json version
       run: |
@@ -31,6 +32,7 @@ jobs:
           echo "Tag version ($TAG) doesn't match package.json version ($PKG_VERSION)"
           exit 1
         fi
+      shell: bash
 
   build-and-publish:
     name: Build & Publish to Marketplace

@@ -35,6 +35,7 @@ jobs:
           echo "Example: feat(commands): add new emoji removal mode"
           exit 1
         fi
+      shell: bash
     
     - name: Validate PR has description
       run: |
@@ -43,10 +44,11 @@ jobs:
           echo "❌ PR description is required and must be at least 20 characters"
           exit 1
         fi
+      shell: bash
     
     - name: Check for breaking changes
-      run: |
-        git diff origin/main...HEAD -- package.json | grep -E '^\+.*"version"' || true
+      run: git diff origin/main...HEAD -- package.json | grep -E '^\+.*"version"' || echo "No version changes detected"
+      shell: bash
     
     - name: Lint and compile
       run: |
@@ -57,8 +59,13 @@ jobs:
     
     - name: Check bundle size
       run: |
-        BUNDLE_SIZE=$(du -sh out | cut -f1)
-        echo "Bundle size: $BUNDLE_SIZE"
+        if [ -d "out" ]; then
+          BUNDLE_SIZE=$(du -sh out | cut -f1)
+          echo "Bundle size: $BUNDLE_SIZE"
+        else
+          echo "No output directory found"
+        fi
+      shell: bash
     
     - name: Comment on PR
       uses: actions/github-script@v7

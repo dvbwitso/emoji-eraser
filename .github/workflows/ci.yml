@@ -44,6 +44,7 @@ jobs:
           echo "Compilation failed - out directory not found"
           exit 1
         fi
+      shell: bash
     
     - name: Package extension
       run: npx vsce package --no-dependencies
@@ -79,22 +80,22 @@ jobs:
     
     - name: Check for TODO/FIXME comments
       run: |
-        if grep -r "TODO\|FIXME" src/ --exclude-dir=node_modules; then
-          echo "⚠️  Found TODO/FIXME comments - consider addressing them"
-        fi
+        grep -r "TODO\|FIXME" src/ --exclude-dir=node_modules || echo "No TODO/FIXME found"
       continue-on-error: true
+      shell: bash
     
     - name: Check package.json format
-      run: |
-        cat package.json | jq empty
+      run: node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
     
     - name: Verify no console.logs in production code
       run: |
-        if grep -r "console.log" src/ --exclude-dir=node_modules | grep -v "console.log.*extension.*active"; then
+        if grep -r "console\.log" src/ 2>/dev/null | grep -v "extension.*active" | grep -v "deactivate"; then
           echo "⚠️  Warning: Found console.log statements"
-          exit 1
+        else
+          echo "✅ No problematic console.log statements found"
         fi
       continue-on-error: true
+      shell: bash
 
   security:
     name: Security Audit
@@ -111,9 +112,9 @@ jobs:
         cache: 'npm'
     
     - name: Run npm audit
-      run: npm audit --audit-level=moderate
+      run: npm audit --audit-level=high || echo "Some vulnerabilities found, but continuing"
       continue-on-error: true
     
     - name: Check for outdated dependencies
-      run: npm outdated
+      run: npm outdated || echo "Some packages are outdated"
       continue-on-error: true

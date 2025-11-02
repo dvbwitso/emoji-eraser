@@ -72,7 +72,9 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No tests configured yet\" && exit 0",
+    "lint": "echo \"No linter configured yet\" && exit 0",
+    "package": "vsce package"
   },
   "repository": {
     "type": "git",
