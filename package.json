@@ -2,8 +2,9 @@
   "name": "emoji-eraser",
   "displayName": "Emoji Eraser",
   "description": "Remove all emojis from your codebase. Keep your code clean, professional, and emoji-free.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "DabwitsoMweemba",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.105.0"
   },
