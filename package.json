@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "publisher": "dvbwitso",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.105.0"
   },
   "categories": [
     "Formatters",
@@ -89,7 +89,7 @@
   "devDependencies": {
     "@types/node": "^24.9.2",
     "@types/vscode": "^1.105.0",
-    "typescript": "^5.9.3",
-    "vsce": "^2.15.0"
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.9.3"
   }
 }
