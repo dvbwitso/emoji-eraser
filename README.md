@@ -1,9 +1,9 @@
 # Emoji Eraser
 
 [![CI](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml/badge.svg)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml)
-[![Release](https://github.com/dvbwitso/emoji-eraser/actions/workflows/release.yml/badge.svg)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/DabwitsoMweemba.emoji-eraser?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
+[![VS Code Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/DabwitsoMweemba.emoji-eraser)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
 
 A lightweight **VS Code extension** that removes all emojis from your codebase. Keep your code clean, professional, and emoji-free—perfect for teams, APIs, or projects where emojis accidentally sneak into strings, comments, or markdown in this LLM era.
 
