@@ -1,0 +1,101 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: Check & Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Check for outdated packages
+      id: outdated
+      run: |
+        npm outdated --json > outdated.json || true
+        if [ -s outdated.json ]; then
+          echo "has_updates=true" >> $GITHUB_OUTPUT
+        else
+          echo "has_updates=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Update minor and patch versions
+      if: steps.outdated.outputs.has_updates == 'true'
+      run: |
+        npm update --save
+    
+    - name: Run security audit
+      run: npm audit fix --audit-level=moderate || true
+    
+    - name: Compile and test
+      run: |
+        npm run compile
+        npm test --if-present
+    
+    - name: Create Pull Request
+      if: steps.outdated.outputs.has_updates == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore(deps): update dependencies'
+        title: 'chore(deps): Weekly dependency updates'
+        body: |
+          ## Automated Dependency Updates
+          
+          This PR updates dependencies to their latest compatible versions.
+          
+          ### Changes
+          - Minor and patch version updates
+          - Security vulnerability fixes
+          
+          ### Testing
+          - ✅ Compilation successful
+          - ✅ Tests passing
+          
+          Please review and merge if all checks pass.
+        branch: deps/automated-updates
+        delete-branch: true
+        labels: dependencies,automated
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Run security audit
+      run: |
+        npm audit --json > audit.json || true
+    
+    - name: Check for critical vulnerabilities
+      run: |
+        CRITICAL=$(cat audit.json | jq '.metadata.vulnerabilities.critical // 0')
+        HIGH=$(cat audit.json | jq '.metadata.vulnerabilities.high // 0')
+        
+        if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ]; then
+          echo "⚠️  Found $CRITICAL critical and $HIGH high severity vulnerabilities"
+          npm audit
+          exit 1
+        fi

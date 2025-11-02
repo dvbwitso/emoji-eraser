@@ -1,0 +1,18 @@
+# Default owner for everything in the repo
+* @dvbwitso
+
+# Workflows require approval
+/.github/workflows/ @dvbwitso
+
+# Core extension code
+/src/ @dvbwitso
+
+# Package configuration
+/package.json @dvbwitso
+/tsconfig.json @dvbwitso
+
+# Documentation can be edited by contributors
+*.md
+
+# CI/CD configurations
+/.github/ @dvbwitso

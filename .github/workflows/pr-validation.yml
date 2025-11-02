@@ -1,0 +1,85 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  pr-checks:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Check PR title format
+      run: |
+        PR_TITLE="${{ github.event.pull_request.title }}"
+        if [[ ! $PR_TITLE =~ ^(feat|fix|docs|style|refactor|test|chore|perf)(\(.+\))?: ]]; then
+          echo "❌ PR title must follow conventional commits format"
+          echo "Expected: type(scope): description"
+          echo "Types: feat, fix, docs, style, refactor, test, chore, perf"
+          echo "Example: feat(commands): add new emoji removal mode"
+          exit 1
+        fi
+    
+    - name: Validate PR has description
+      run: |
+        PR_BODY="${{ github.event.pull_request.body }}"
+        if [ -z "$PR_BODY" ] || [ ${#PR_BODY} -lt 20 ]; then
+          echo "❌ PR description is required and must be at least 20 characters"
+          exit 1
+        fi
+    
+    - name: Check for breaking changes
+      run: |
+        git diff origin/main...HEAD -- package.json | grep -E '^\+.*"version"' || true
+    
+    - name: Lint and compile
+      run: |
+        npm run compile
+    
+    - name: Run tests
+      run: npm test --if-present
+    
+    - name: Check bundle size
+      run: |
+        BUNDLE_SIZE=$(du -sh out | cut -f1)
+        echo "Bundle size: $BUNDLE_SIZE"
+    
+    - name: Comment on PR
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '✅ All PR validation checks passed!'
+          })
+
+  prevent-direct-main-push:
+    name: Block Direct Push to Main
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'dvbwitso'
+    
+    steps:
+    - name: Reject unauthorized push
+      run: |
+        echo "❌ Direct pushes to main are not allowed!"
+        echo "Only @dvbwitso can push to main."
+        echo "Please create a pull request instead."
+        exit 1
