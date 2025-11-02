@@ -1,3 +1,13 @@
 node_modules
 .vscode
 out/test
+src/**
+tsconfig.json
+.gitignore
+.git
+*.vsix
+test-emoji-file.py
+test-emoji-file.ts
+BUILD_SUMMARY.md
+CONTRIBUTING.md
+.DS_Store
