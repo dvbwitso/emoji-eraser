@@ -1,0 +1,26 @@
+{
+  "name": "emoji-eraser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dvbwitso/emoji-eraser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dvbwitso/emoji-eraser/issues"
+  },
+  "homepage": "https://github.com/dvbwitso/emoji-eraser#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.9.2",
+    "typescript": "^5.9.3",
+    "vsce": "^2.15.0",
+    "vscode": "^1.1.37"
+  }
+}
