@@ -26,7 +26,7 @@ A lightweight **VS Code extension** that removes all emojis from your codebase. 
 
 A tiny, fast VS Code extension to remove emojis from source files, comments, and markdown. Ideal for teams, CI pipelines, and projects that need clean, professional text.
 
-![Demo screenshot 1](https://via.placeholder.com/880x660.png?text=Emoji+Eraser+Demo+1)
+![Removing emojis demo](images/removing-emojis.png)
 
 Why this extension?
 - Keep codebases professional and machine-readable.
@@ -84,14 +84,9 @@ const message = "Deploy completed  — all services running";
 
 Placeholders below show where screenshots/GIF/video will appear on the Marketplace page. Replace these with real recordings or high-quality screenshots (suggested sizes: 1280×720 for videos/GIFs, 880×660 for images).
 
-![Demo screenshot 1](https://via.placeholder.com/880x660.png?text=Emoji+Eraser+Demo+1)
-![Demo screenshot 2](https://via.placeholder.com/880x660.png?text=Emoji+Eraser+Demo+2)
-![Demo animated placeholder](https://via.placeholder.com/880x660.png?text=Animated+Demo+Placeholder)
-
-Tips for visuals:
-- Show the Command Palette and the command execution
-- Show a before/after side-by-side (one image with overlay or two images)
-- For GIF/video, keep it short (8–15s) and autoplay muted
+![Command palette demo](images/Demo-CMD+SHIFT+P.png)
+![Prompt to continue dialog](images/prompt-to-continue.png)
+![Removing emojis demo](images/removing-emojis.png)
 
 ---
 
@@ -105,14 +100,6 @@ npm run compile
 code .
 # Press F5 to launch Extension Development Host
 ```
-
----
-
-## Publishing hints for Marketplace
-
-- Use the `displayName` and the short description in `package.json` to include key terms (emoji, remove, formatter, lint, productivity). We've updated those values.
-- Add the real screenshots and a short demo GIF or MP4 under `images/` and reference them in the README.
-- Choose categories `Formatters` and `Linters` and include the keywords shown above.
 
 ---
 
