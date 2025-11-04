@@ -17,74 +17,96 @@ A lightweight **VS Code extension** that removes all emojis from your codebase. 
 
 - **Workspace-Wide Emoji Removal**  
   Scan your entire workspace and clean emojis in bulk.  
+## Emoji Eraser — Remove unwanted emojis from your code instantly
 
-- **Selective Removal**  
-  Options to remove emojis from:
-  - **Comments only**  
-  - **Strings only**  
-  - **Everywhere in code**
+[![CI](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/DabwitsoMweemba.emoji-eraser?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/DabwitsoMweemba.emoji-eraser)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
 
-- **Preview / Undo**  
-  Preview changes before applying or use VS Code’s native undo for safety.
+A tiny, fast VS Code extension to remove emojis from source files, comments, and markdown. Ideal for teams, CI pipelines, and projects that need clean, professional text.
 
-- **Emoji Count / Summary**  
-  Get notifications like:
-  - “Removed 24 emojis from this file”  
-  - “Workspace: 137 emojis removed”
+![Removing emojis demo](images/removing-emojis.png)
 
-- **Hotkey Support (Optional)**  
-  Assign a shortcut for fast emoji removal without opening the Command Palette.
+Why this extension?
+- Keep codebases professional and machine-readable.
+- Prevent accidental emojis in docs, API strings, or log messages.
+- Simple UX: one command per scope and optional previews.
 
 ---
 
-### Optional Future Enhancements
-- **Auto-scan on save**  
-- **File-type filters** (clean `.js`, `.ts`, `.md` only)  
-- **Log file** to track cleaned files and counts  
+### Quick summary
+- Name: Emoji Eraser — Remove unwanted emojis from your code instantly
+- Tags / keywords: emoji, remove, formatter, lint, productivity, ai, code-quality
+- Categories: Formatters, Linters
 
 ---
 
-## Installation
+## Features
 
-1. Clone the repository:
+- Single-file removal (current file)
+- Workspace-wide removal (bulk)
+- Selective removal: comments only, strings only, or everywhere
+- Preview changes and use VS Code undo
+- Counts and summaries after runs
+- Lightweight and configurable (file-type filters)
+
+---
+
+## Try it (commands)
+
+- Remove Emojis from Current File — `emoji-eraser.removeFromFile`
+- Remove Emojis from Workspace — `emoji-eraser.removeFromWorkspace`
+- Remove Emojis from Comments Only — `emoji-eraser.removeFromComments`
+- Remove Emojis from Strings Only — `emoji-eraser.removeFromStrings`
+
+Open the Command Palette (Ctrl/Cmd+Shift+P) and type the command name.
+
+## Before / After example
+
+Before (string with emoji):
+
+```ts
+const message = "Deploy completed ✅ — all services running";
+// comment: this is great 😄
+```
+
+Run Emoji Eraser (current file) → After:
+
+```ts
+const message = "Deploy completed  — all services running";
+// comment: this is great 
+```
+
+---
+
+## Visuals
+
+Placeholders below show where screenshots/GIF/video will appear on the Marketplace page. Replace these with real recordings or high-quality screenshots (suggested sizes: 1280×720 for videos/GIFs, 880×660 for images).
+
+![Command palette demo](images/Demo-CMD+SHIFT+P.png)
+![Prompt to continue dialog](images/prompt-to-continue.png)
+![Removing emojis demo](images/removing-emojis.png)
+
+---
+
+## Installation & development
 
 ```bash
 git clone https://github.com/dvbwitso/emoji-eraser.git
 cd emoji-eraser
-```
-
-2. Install dependencies
-
-```bash
 npm install
-```
-
-3. Compile TypeScript
-
-```bash
 npm run compile
+code .
+# Press F5 to launch Extension Development Host
 ```
-
-4. Run in VS Code
-
-Open the project in VS Code and press F5 to run the extension in a new Extension Development Host window.
-
----
-
-## Usage
-
-- Open a file → Ctrl+Shift+P → "Remove Emojis from Current File"
-- Clean the entire workspace → Ctrl+Shift+P → "Remove Emojis from Workspace"
-- Optional: Configure hotkeys in VS Code settings
 
 ---
 
 ## Contributing
 
-Contributions and suggestions are welcome. Please open an issue or submit a pull request.
-
----
+Contributions welcome — open an issue with the feature idea or bug.
 
 ## License
 
-MIT License © Dabwitso Mweemba
+MIT © Dabwitso Mweemba

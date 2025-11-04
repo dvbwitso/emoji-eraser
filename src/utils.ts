@@ -1,7 +1,7 @@
 /**
  * Comprehensive emoji regex pattern
  * Matches most emojis including:
- * - Basic emojis (😀-🙏)
+ * - Basic emojis (-)
  * - Symbols & Pictographs
  * - Transport & Map symbols
  * - Supplementary symbols
@@ -132,5 +132,5 @@ export function formatSummary(stats: EmojiStats): string {
     return `No emojis found in ${stats.filesProcessed} file(s).`;
   }
   
-  return `✅ Removed ${stats.totalEmojis} emoji(s) from ${stats.filesWithEmojis} file(s) (${stats.filesProcessed} total files scanned).`;
+  return ` Removed ${stats.totalEmojis} emoji(s) from ${stats.filesWithEmojis} file(s) (${stats.filesProcessed} total files scanned).`;
 }
