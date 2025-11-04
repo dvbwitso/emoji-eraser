@@ -5,6 +5,22 @@ node_modules/
 out/
 dist/
 
+# VS Code extension packages
+*.vsix
+
+# Test files
+test-*.js
+test-*.ts
+test-*.py
+
+# Private/Internal documentation (maintainer only)
+BUILD_SUMMARY.md
+PUBLISHING_GUIDE.md
+setup-publishing.sh
+.github/CICD_SETUP.md
+.github/BRANCH_PROTECTION_GUIDE.md
+QUICKSTART.md
+
 # VS Code settings
 .vscode/
 .vscode-test/

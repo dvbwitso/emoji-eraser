@@ -5,7 +5,17 @@ import {
   removeEmojisFromComments,
   removeEmojisFromStrings,
   formatSummary,
-  type EmojiStats
+  removeTrailingWhitespace,
+  countTrailingWhitespace,
+  removeDebugStatements,
+  countDebugStatements,
+  removeAIComments,
+  countAIComments,
+  cleanAllAIArtifacts,
+  fixMultipleSpaces,
+  type EmojiStats,
+  type CleanupStats,
+  formatCleanupSummary
 } from './utils';
 
 /**
@@ -46,11 +56,47 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  // Register command: Remove trailing whitespace
+  const removeTrailingWhitespaceCommand = vscode.commands.registerCommand(
+    'emoji-eraser.removeTrailingWhitespace',
+    async () => {
+      await removeTrailingWhitespaceFromFile();
+    }
+  );
+
+  // Register command: Remove debug statements
+  const removeDebugStatementsCommand = vscode.commands.registerCommand(
+    'emoji-eraser.removeDebugStatements',
+    async () => {
+      await removeDebugStatementsFromFile();
+    }
+  );
+
+  // Register command: Remove AI comments
+  const removeAICommentsCommand = vscode.commands.registerCommand(
+    'emoji-eraser.removeAIComments',
+    async () => {
+      await removeAICommentsFromFile();
+    }
+  );
+
+  // Register command: Clean all AI artifacts
+  const cleanAllArtifactsCommand = vscode.commands.registerCommand(
+    'emoji-eraser.cleanAllArtifacts',
+    async () => {
+      await cleanAllArtifactsFromFile();
+    }
+  );
+
   context.subscriptions.push(
     removeFromFileCommand,
     removeFromWorkspaceCommand,
     removeFromCommentsCommand,
-    removeFromStringsCommand
+    removeFromStringsCommand,
+    removeTrailingWhitespaceCommand,
+    removeDebugStatementsCommand,
+    removeAICommentsCommand,
+    cleanAllArtifactsCommand
   );
 }
 
@@ -121,7 +167,7 @@ async function removeEmojisFromCurrentFile(mode: 'all' | 'comments' | 'strings' 
       const finalCount = countEmojis(cleanedText);
       const removed = emojiCount - finalCount;
       vscode.window.showInformationMessage(
-        `✅ Removed ${removed} emoji(s) from this file.`
+        ` Removed ${removed} emoji(s) from this file.`
       );
     }
   } else {
@@ -283,4 +329,216 @@ async function showDiff(
  */
 export function deactivate() {
   console.log('Emoji Eraser extension is now deactivated.');
+}
+
+/**
+ * Remove trailing whitespace from the currently active file
+ */
+async function removeTrailingWhitespaceFromFile() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showWarningMessage('No active file to process.');
+    return;
+  }
+
+  const document = editor.document;
+  const text = document.getText();
+  const lineCount = countTrailingWhitespace(text);
+
+  if (lineCount === 0) {
+    vscode.window.showInformationMessage('No trailing whitespace found.');
+    return;
+  }
+
+  const answer = await vscode.window.showWarningMessage(
+    `Found trailing whitespace on ${lineCount} line(s). Remove it?`,
+    'Yes',
+    'Cancel'
+  );
+
+  if (answer !== 'Yes') {
+    return;
+  }
+
+  const cleanedText = removeTrailingWhitespace(text);
+
+  const success = await editor.edit((editBuilder) => {
+    const firstLine = document.lineAt(0);
+    const lastLine = document.lineAt(document.lineCount - 1);
+    const fullRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
+    editBuilder.replace(fullRange, cleanedText);
+  });
+
+  if (success) {
+    vscode.window.showInformationMessage(
+      ` Removed trailing whitespace from ${lineCount} line(s).`
+    );
+  }
+}
+
+/**
+ * Remove debug statements from the currently active file
+ */
+async function removeDebugStatementsFromFile() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showWarningMessage('No active file to process.');
+    return;
+  }
+
+  const document = editor.document;
+  const text = document.getText();
+  const debugCount = countDebugStatements(text, document.languageId);
+
+  if (debugCount === 0) {
+    vscode.window.showInformationMessage('No debug statements found.');
+    return;
+  }
+
+  const answer = await vscode.window.showWarningMessage(
+    `Found ${debugCount} debug statement(s). Remove them?`,
+    'Yes',
+    'Preview',
+    'Cancel'
+  );
+
+  if (answer === 'Cancel' || !answer) {
+    return;
+  }
+
+  const cleanedText = removeDebugStatements(text, document.languageId);
+
+  if (answer === 'Preview') {
+    await showDiff(document, text, cleanedText);
+    return;
+  }
+
+  const success = await editor.edit((editBuilder) => {
+    const firstLine = document.lineAt(0);
+    const lastLine = document.lineAt(document.lineCount - 1);
+    const fullRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
+    editBuilder.replace(fullRange, cleanedText);
+  });
+
+  if (success) {
+    vscode.window.showInformationMessage(
+      ` Removed ${debugCount} debug statement(s).`
+    );
+  }
+}
+
+/**
+ * Remove AI comment markers from the currently active file
+ */
+async function removeAICommentsFromFile() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showWarningMessage('No active file to process.');
+    return;
+  }
+
+  const document = editor.document;
+  const text = document.getText();
+  const commentCount = countAIComments(text);
+
+  if (commentCount === 0) {
+    vscode.window.showInformationMessage('No AI comment markers found.');
+    return;
+  }
+
+  const answer = await vscode.window.showWarningMessage(
+    `Found ${commentCount} AI comment marker(s). Remove them?`,
+    'Yes',
+    'Cancel'
+  );
+
+  if (answer !== 'Yes') {
+    return;
+  }
+
+  const cleanedText = removeAIComments(text);
+
+  const success = await editor.edit((editBuilder) => {
+    const firstLine = document.lineAt(0);
+    const lastLine = document.lineAt(document.lineCount - 1);
+    const fullRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
+    editBuilder.replace(fullRange, cleanedText);
+  });
+
+  if (success) {
+    vscode.window.showInformationMessage(
+      ` Removed ${commentCount} AI comment marker(s).`
+    );
+  }
+}
+
+/**
+ * Clean all AI artifacts from the currently active file
+ */
+async function cleanAllArtifactsFromFile() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showWarningMessage('No active file to process.');
+    return;
+  }
+
+  const document = editor.document;
+  const text = document.getText();
+
+  // Count all issues
+  const stats = {
+    emojis: countEmojis(text),
+    debugStatements: countDebugStatements(text, document.languageId),
+    aiComments: countAIComments(text),
+    trailingWhitespace: countTrailingWhitespace(text)
+  };
+
+  const totalIssues = stats.emojis + stats.debugStatements + stats.aiComments + stats.trailingWhitespace;
+
+  if (totalIssues === 0) {
+    vscode.window.showInformationMessage(' No AI artifacts found. Code looks clean!');
+    return;
+  }
+
+  // Build message
+  const issues: string[] = [];
+  if (stats.emojis > 0) issues.push(`${stats.emojis} emoji(s)`);
+  if (stats.debugStatements > 0) issues.push(`${stats.debugStatements} debug statement(s)`);
+  if (stats.aiComments > 0) issues.push(`${stats.aiComments} AI comment(s)`);
+  if (stats.trailingWhitespace > 0) issues.push(`trailing whitespace on ${stats.trailingWhitespace} line(s)`);
+
+  const answer = await vscode.window.showWarningMessage(
+    `Found: ${issues.join(', ')}. Clean all?`,
+    'Yes',
+    'Preview',
+    'Cancel'
+  );
+
+  if (answer === 'Cancel' || !answer) {
+    return;
+  }
+
+  const cleanedText = cleanAllAIArtifacts(text, document.languageId);
+
+  if (answer === 'Preview') {
+    await showDiff(document, text, cleanedText);
+    return;
+  }
+
+  const success = await editor.edit((editBuilder) => {
+    const firstLine = document.lineAt(0);
+    const lastLine = document.lineAt(document.lineCount - 1);
+    const fullRange = new vscode.Range(firstLine.range.start, lastLine.range.end);
+    editBuilder.replace(fullRange, cleanedText);
+  });
+
+  if (success) {
+    vscode.window.showInformationMessage(
+      ` Cleaned all AI artifacts! Fixed: ${issues.join(', ')}`
+    );
+  }
 }

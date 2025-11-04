@@ -2,41 +2,56 @@ name: Release & Publish
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'images/**'
+      - '.gitignore'
+      - 'LICENSE'
 
 jobs:
-  validate-tag:
-    name: Validate Release Tag
+  check-version-change:
+    name: Check if Version Changed
     runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.check.outputs.changed }}
+      current_version: ${{ steps.check.outputs.version }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
     
-    - name: Validate tag format
+    - name: Check if version changed
+      id: check
       run: |
-        TAG=${GITHUB_REF#refs/tags/}
-        if [[ ! $TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          echo "Invalid tag format: $TAG"
-          echo "Expected format: v1.2.3"
-          exit 1
-        fi
-      shell: bash
-    
-    - name: Check tag matches package.json version
-      run: |
-        TAG=${GITHUB_REF#refs/tags/v}
-        PKG_VERSION=$(node -p "require('./package.json').version")
-        if [ "$TAG" != "$PKG_VERSION" ]; then
-          echo "Tag version ($TAG) doesn't match package.json version ($PKG_VERSION)"
-          exit 1
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        
+        # Check if this is the first commit or if version changed
+        if git rev-parse HEAD~1 >/dev/null 2>&1; then
+          git show HEAD~1:package.json > /tmp/old-package.json 2>/dev/null || echo '{"version":"0.0.0"}' > /tmp/old-package.json
+          PREVIOUS_VERSION=$(node -p "require('/tmp/old-package.json').version")
+          
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Version unchanged: $CURRENT_VERSION"
+          fi
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "✅ First commit, will publish version $CURRENT_VERSION"
         fi
       shell: bash
 
   build-and-publish:
     name: Build & Publish to Marketplace
-    needs: validate-tag
+    needs: check-version-change
+    if: needs.check-version-change.outputs.version_changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -57,16 +72,26 @@ jobs:
     - name: Compile extension
       run: npm run compile
     
+    - name: Run tests
+      run: npm test
+    
     - name: Package extension
       run: npx vsce package
     
-    - name: Get version from tag
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    - name: Create Git Tag
+      run: |
+        VERSION="${{ needs.check-version-change.outputs.current_version }}"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git tag -a "v$VERSION" -m "Release v$VERSION"
+        git push origin "v$VERSION"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: v${{ needs.check-version-change.outputs.current_version }}
         files: '*.vsix'
         generate_release_notes: true
         draft: false
@@ -84,11 +109,12 @@ jobs:
 
   notify-success:
     name: Notify Release Success
-    needs: build-and-publish
+    needs: [check-version-change, build-and-publish]
+    if: needs.check-version-change.outputs.version_changed == 'true'
     runs-on: ubuntu-latest
     
     steps:
     - name: Success notification
       run: |
-        echo "✅ Successfully published version ${GITHUB_REF#refs/tags/}"
+        echo "✅ Successfully published version ${{ needs.check-version-change.outputs.current_version }}"
         echo "Check the VS Code Marketplace for the new version"
