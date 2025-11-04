@@ -1,7 +1,7 @@
 {
   "name": "emoji-eraser",
-  "displayName": "Emoji Eraser",
-  "description": "Remove all emojis from your codebase. Keep your code clean, professional, and emoji-free.",
+  "displayName": "Emoji Eraser — Remove unwanted emojis from your code instantly",
+  "description": "Emoji Eraser — instantly remove unwanted emojis from source code, comments, and docs. Lightweight, configurable, and perfect for teams and CI workflows.",
   "version": "1.0.1",
   "publisher": "DabwitsoMweemba",
   "icon": "images/icon.png",
@@ -10,13 +10,18 @@
   },
   "categories": [
     "Formatters",
+    "Linters",
     "Other"
   ],
   "keywords": [
     "emoji",
+    "remove",
     "clean",
     "formatter",
-    "remove",
+    "lint",
+    "productivity",
+    "ai",
+    "code-quality",
     "unicode"
   ],
   "main": "./out/extension.js",
@@ -79,7 +84,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dvbwitso/emoji-eraser.git"
+    "url": "https://github.com/dvbwitso/emoji-eraser"
   },
   "author": "Dabwitso Mweemba",
   "license": "MIT",
