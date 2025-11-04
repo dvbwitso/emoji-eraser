@@ -17,16 +17,6 @@ A lightweight **VS Code extension** that removes all emojis from your codebase. 
 
 - **Workspace-Wide Emoji Removal**  
   Scan your entire workspace and clean emojis in bulk.  
-## Emoji Eraser — Remove unwanted emojis from your code instantly
-
-[![CI](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/dvbwitso/emoji-eraser/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/DabwitsoMweemba.emoji-eraser?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/DabwitsoMweemba.emoji-eraser)](https://marketplace.visualstudio.com/items?itemName=DabwitsoMweemba.emoji-eraser)
-
-A tiny, fast VS Code extension to remove emojis from source files, comments, and markdown. Ideal for teams, CI pipelines, and projects that need clean, professional text.
-
-![Removing emojis demo](images/removing-emojis.png)
 
 Why this extension?
 - Keep codebases professional and machine-readable.
@@ -80,13 +70,9 @@ const message = "Deploy completed  — all services running";
 
 ---
 
-## Visuals
-
-Placeholders below show where screenshots/GIF/video will appear on the Marketplace page. Replace these with real recordings or high-quality screenshots (suggested sizes: 1280×720 for videos/GIFs, 880×660 for images).
-
-![Command palette demo](images/Demo-CMD+SHIFT+P.png)
-![Prompt to continue dialog](images/prompt-to-continue.png)
-![Removing emojis demo](images/removing-emojis.png)
+1. ![Command palette demo](images/Demo-CMD+SHIFT+P.png)
+2. ![Prompt to continue dialog](images/prompt-to-continue.png)
+3. ![Removing emojis demo](images/removing-emojis.png)
 
 ---
 
