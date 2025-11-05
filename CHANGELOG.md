@@ -2,6 +2,13 @@
 
 All notable changes to the "Emoji Eraser" extension will be documented in this file.
 
+## [1.1.1] - 2025-11-05
+
+### Documentation
+- Updated README with clearer feature descriptions
+- Improved supported languages documentation
+- Enhanced examples and use cases
+
 ## [1.1.0] - 2025-11-04
 
 ### Major Update: AI Code Cleanup Features
