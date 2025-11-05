@@ -12,11 +12,11 @@ A powerful **VS Code extension** that cleans AI-generated code artifacts from yo
 ## Features
 
 ### Core Cleanup Features
-- ** Remove Emojis** - Clean emojis from code, comments, strings, or everywhere
-- ** Remove Debug Statements** - Strip console.log, print(), debugger, and similar debug code
-- ** Remove AI Comment Markers** - Clean up "AI-generated", "Copilot suggestion" comments
-- ** Remove Trailing Whitespace** - Clean up whitespace at line ends
-- ** Clean All AI Artifacts** - One-click cleanup of all common AI code issues
+- **Remove Emojis** - Clean emojis from code, comments, strings, or everywhere
+- **Remove Debug Statements** - Strip console.log, print(), debugger, and similar debug code
+- **Remove AI Comment Markers** - Clean up "AI-generated", "Copilot suggestion" comments
+- **Remove Trailing Whitespace** - Clean up whitespace at line ends
+- **Clean All AI Artifacts** - One-click cleanup of all common AI code issues
 
 ### Advanced Options
 - **Single File Cleanup** - Clean the currently active file
